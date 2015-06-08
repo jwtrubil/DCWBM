@@ -3,3 +3,7 @@ inst/doc
 .Rproj.user
 .Rhistory
 .RData
+*.o
+src/*.o-*
+*.so
+*.dll
