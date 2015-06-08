@@ -20,7 +20,7 @@ double melttemp = 0.0;                  //Temp (C) where snowmelt begins
 double STC = 150.0;                     //Soil Moisture Storage Capacity    (mm)
 double drofrac = 0.05;                  //Direct runoff fraction
 double rfactor = 0.5;                   //fraction of surplus that becomes runoff in a month (Wolock and McCabe(1999)
-double meltrate = 2.0;                  //base snowmelt rate (mm/deg C) under forest coverage
+double meltrate = 2;                    //base snowmelt rate (mm/deg C) under forest coverage
 double glaciermeltfactor = 2.25;        //glacier melt factor multiplier
   
 //initial interception factors, for error handling
@@ -70,7 +70,6 @@ NumericVector total_RO(12);             //Total runoff (surplus plus direct)
 //Functions used in model
 
 //compute mean of an array
-//// [[Rcpp::export]]
 double meanC(NumericVector x) {
   int n = x.size();
   double total = 0;
@@ -83,7 +82,6 @@ double meanC(NumericVector x) {
 
 
 //compute mean day length per month
-//// [[Rcpp::export]]
 NumericVector daylen(double Lat){
   //NumericVector D(365);               //Approximate Day Length
   D = rep(-9999,365);                   //reset day length
@@ -98,14 +96,12 @@ NumericVector daylen(double Lat){
 
 
 //get the days that are in a certain month
-//// [[Rcpp::export]]
 NumericVector ss(NumericVector input, int startday, int endday){
   NumericVector ss(input.begin()+startday, input.begin()+endday+1);
   return ss;
 }
 
 //Compute mean day length per month in units of 12 hours
-//// [[Rcpp::export]]
 NumericVector meandaylen(){
   m_day = rep(-9999,12); //reset m_day
 
@@ -125,36 +121,7 @@ NumericVector meandaylen(){
   //return(m_day);  //don't need to return anything when its a global variable in the model
 }
 
-// //Prefer to have shorter code to get the mean day length per month, doesn't work now though.
-// //must be some sort of type conversion error
-// // [[Rcpp::export]]
-// NumericVector testmdl(NumericVector DOY, NumericVector d){
-//   int start;
-//   int end;
-//   NumericVector m_day(12);
-//   //m_day = rep(-9999,12); //reset m_day
-// 
-//   for (int j = 0; j < 12; j++) {
-//     if (j==0){
-//       //do stuff for first month
-//       start = 0;
-//     }
-//     else {
-//       //do stuff for other months
-//       start = sum(ss(d,0,(j-1)));
-//     }
-//     end = sum(ss(d,0,j))-1;
-//     m_day[j] = meanC(ss(D,start,end))/12;
-//   }
-//   
-//   return m_day; //don't need to return anything when its a global variable in the model
-// }
-
-
-
-
 ////Calculate Hamon PET
-//// [[Rcpp::export]]
 double calcPETh(int month, double meanairtemp){
   //Saturated Water Vapor Density
   double Wt=(4.95*exp(0.062*meanairtemp))/100.0;
@@ -163,7 +130,6 @@ double calcPETh(int month, double meanairtemp){
 }
 
 //partition precipitation
-//// [[Rcpp::export]]
 double part(double airtemp, double T_rain, double T_snow){
   return (T_rain-airtemp)/(T_rain-T_snow);  
 }
@@ -172,8 +138,8 @@ double part(double airtemp, double T_rain, double T_snow){
 double rates(int LC, NumericVector calvals){
   //Melt Factor increases snowmelt by X if no tree coverage (alpine or grassland).  Also an interception factor decreases snow and rain when there is forest coverage
   //Future expansion= different interception rates for different BEC zones.
-        if (LC == 1 || LC == -9999){ //CHANGED //CHANGED 04-06-2014
-          //Clearcut/alpine values  
+        if (LC == 1 || LC == -9999){
+          //Original Clearcut/alpine values  
           //meltfactor = 1.75
           //snowintfactor=0      
           //rainintfactor=0
@@ -181,8 +147,8 @@ double rates(int LC, NumericVector calvals){
           rainintfactor = calvals[3];
           meltfactor=calvals[0];
         } else {
-          if (LC == 2){ //CHANGED //CHANGED 04-06-2014
-            //subalpine values
+          if (LC == 2){
+            //Original subalpine values
             //meltfactor=1.25
             //snowintfactor=0.1
             //rainintfactor=0.1
@@ -190,8 +156,8 @@ double rates(int LC, NumericVector calvals){
             rainintfactor = calvals[4];
             meltfactor = calvals[1];
             }else{
-              if (LC == 3){ //CHANGED //CHANGED 04-06-2014
-                //full canopy values
+              if (LC == 3){
+                //Original full canopy values
                 //meltfactor=1
                 //snowintfactor=0.25
                 //rainintfactor=0.25

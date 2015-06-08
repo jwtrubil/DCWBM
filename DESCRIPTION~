@@ -1,19 +1,20 @@
-Package: mypackage
-Title: Title of Package
+Package: DCWBM
+Title: Distributed Climate Water Balance Model
 Version: 0.1.0
-Authors@R: person("Hadley", "Wickham", email =
-"hadley@me.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph)
+Authors@R: person("Joel", "Trubilowicz", email = "jwtrubil@gmail.com", role = c("aut", "cre"))
+Description: The core code for running the Distributed 
+    Climate Water Balance Model
+    from Moore, R.D., Trubilowicz, J.W. and Buttle, J.M. (2012), 
+    Prediction of Streamflow Regime and Annual Runoff for 
+    Ungauged Basins Using a Distributed Monthly Water Balance Model. 
+    JAWRA Journal of the American Water Resources Association, 
+    48. 32–42. DOI: 10.1111/j.1752–1688.2011.00595.x
 Depends: R (>= 3.1.0)
 License: GPL-2
 LazyData: true
-Import packages that your package
-Imports:
-must have to work. R will install
-dplyr (>= 0.4.0),
-them when it installs your package.
-ggvis (>= 0.2)
-Suggest packages that are not very
-Suggests:
-essential to yours. Users can install
-knitr (>= 0.1.0)
+Imports: Rcpp
+Suggests: dplyr, tidyr, sp, testthat,
+    knitr
+LinkingTo: Rcpp
+VignetteBuilder: knitr
+Encoding: UTF-8
