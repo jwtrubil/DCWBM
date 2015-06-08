@@ -8,7 +8,7 @@ This is an R package containing the model code for the Distributed Climate Water
 To install:
 `devtools::install_github('jwtrubil/DCWBM', build_vignettes=TRUE)`
 
-If you are on windows, you'll need to install [Rtools](http://cran.r-project.org/bin/windows/Rtools/) along with the `devtools` R package in order to run the 'install_github()' command.
+If you are on windows, you'll need to install [Rtools](http://cran.r-project.org/bin/windows/Rtools/) along with the `devtools` R package in order to run the `install_github()` command.
 
 Load:
 `library(DCWBM)`
