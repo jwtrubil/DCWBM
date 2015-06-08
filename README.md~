@@ -7,11 +7,17 @@ This is an R package containing the model code for the Distributed Climate Water
 
 To install:
 ```library(devtools)```
-```install_github("jwtrubil/DCWBM")```
+```install_github("jwtrubil/DCWBM", build_vignettes=TRUE)```
+
+Load:
+```library(DCWBM)```
 
 Once loaded:
 ```?DCWBM```
 for help.
+
+Check out the vignette:
+```vignette('owikeno', package = "DCWBM")```
 
 For more updates on me, DCWBM, and other projects, check out:
 [headwateranalytics.com](http://www.headwateranalytics.com)

@@ -26,7 +26,7 @@ Glacier: Binary for Glacier coverage, either (0) no or (1) yes. Overrides LC_cla
 5. Interception rate (snow and rain) in areas with partial treecover \cr
 6. Interception rate (snow and rain) in areas with full treecover \cr}
 
-\item{output}{Desired output form, either 'LUMPED' or 'DISTRIBUTED'}
+\item{output}{Desired output form, either 'LUMPED' or 'DISTRIB'}
 }
 \value{
 Monthly runoff in millimeters, either lumped for the whole area, or distributed by coordinates.
@@ -34,6 +34,9 @@ Monthly runoff in millimeters, either lumped for the whole area, or distributed 
 \description{
 Run the distributed climate water balance model on a data frame of points containing climate and landcover data.
  The model is spatially uncoupled, so points can be of any spatial organization desired.
- Most development has occured using 400 m resolution gridded data as input.  Parameters can be adjusted to calibrate to observations.
+ Most development has occured using 400 m resolution gridded data as input.  Parameters can be adjusted to calibrate to observations. \cr
+}
+\references{
+Moore, R.D., Trubilowicz, J.W. and Buttle, J.M. (2012), Prediction of Streamflow Regime and Annual Runoff for Ungauged Basins Using a Distributed Monthly Water Balance Model. Journal of the American Water Resources Association, 48: 32–42. DOI: 10.1111/j.1752–1688.2011.00595.x \cr
 }
 

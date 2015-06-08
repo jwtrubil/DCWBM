@@ -4,7 +4,9 @@
 #' 
 #' @description Run the distributed climate water balance model on a data frame of points containing climate and landcover data. 
 #'  The model is spatially uncoupled, so points can be of any spatial organization desired.
-#'  Most development has occured using 400 m resolution gridded data as input.  Parameters can be adjusted to calibrate to observations.
+#'  Most development has occured using 400 m resolution gridded data as input.  Parameters can be adjusted to calibrate to observations. \cr
+#'
+#'  @references Moore, R.D., Trubilowicz, J.W. and Buttle, J.M. (2012), Prediction of Streamflow Regime and Annual Runoff for Ungauged Basins Using a Distributed Monthly Water Balance Model. Journal of the American Water Resources Association, 48: 32–42. DOI: 10.1111/j.1752–1688.2011.00595.x \cr
 #' 
 #' @param parameters 
 #' A vector of six model parameters for adjusting snowmelt rates from the base melt rate of 2mm/degree C and interception rates by landcover \cr
@@ -24,7 +26,7 @@
 #'     LC_class: Landcover classification, either (1) for no treecover, (2) for partial treecover, or (3) for full treecover \cr
 #'     Water: Binary for surface water, either (0) no or (1) yes.  Overrides LC_class \cr
 #'     Glacier: Binary for Glacier coverage, either (0) no or (1) yes. Overrides LC_class \cr
-#' @param output Desired output form, either 'LUMPED' or 'DISTRIBUTED'
+#' @param output Desired output form, either 'LUMPED' or 'DISTRIB'
 #' @return Monthly runoff in millimeters, either lumped for the whole area, or distributed by coordinates.
 #' 
 #' @export
