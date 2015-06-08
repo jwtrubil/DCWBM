@@ -1,0 +1,19 @@
+Package: mypackage
+Title: Title of Package
+Version: 0.1.0
+Authors@R: person("Hadley", "Wickham", email =
+"hadley@me.com", role = c("aut", "cre"))
+Description: What the package does (one paragraph)
+Depends: R (>= 3.1.0)
+License: GPL-2
+LazyData: true
+Import packages that your package
+Imports:
+must have to work. R will install
+dplyr (>= 0.4.0),
+them when it installs your package.
+ggvis (>= 0.2)
+Suggest packages that are not very
+Suggests:
+essential to yours. Users can install
+knitr (>= 0.1.0)

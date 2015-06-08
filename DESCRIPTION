@@ -1,0 +1,15 @@
+Package: DCWBM
+Title: Distributed Climate Water Balance Model
+Version: 0.1.0
+Authors@R: person("Joel", "Trubilowicz", email =
+"jwtrubil@gmail.com", role = c("aut", "cre"))
+Description: This package is the core code for running the distributed climate water balance model from Moore RD, Trubilowicz JW, Buttle JM. 2012. Prediction of streamflow regime and annual runoff for ungauged basins using a distributed monthly water balance model. Journal of the American Water Resources Association 1–11
+Depends: R (>= 3.1.0)
+License: GPL-2
+LazyData: true
+Imports:
+dplyr (>= 0.4.0),
+tidyr (>= 0.2.0),
+sp    (>=1.1-0),
+Suggests:
+
