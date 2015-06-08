@@ -18,5 +18,5 @@ for help.
 Check out the vignette:
 `vignette('owikeno', package = "DCWBM")`
 
-For more updates on me, DCWBM, and other projects by me an collaborators, check out:
+For more updates on me, DCWBM, and other projects by me and my collaborators, check out:
 [headwateranalytics.com](http://www.headwateranalytics.com)
