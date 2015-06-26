@@ -12,7 +12,7 @@ The model described in the paper is an extension to the monthly water balance mo
 To install:
 `devtools::install_github('jwtrubil/DCWBM', build_vignettes=TRUE)`
 
-If you are on windows, you'll need to install [Rtools](http://cran.r-project.org/bin/windows/Rtools/) along with the `devtools` R package in order to run the `install_github()` command.
+If you are on windows, you'll need to install [Rtools](http://cran.r-project.org/bin/windows/Rtools/) along with the `devtools` R package in order to run the `install_github()` command.  If you use osx, you'll need to install xcode from the Mac App store.
 
 Load:
 `library(DCWBM)`
