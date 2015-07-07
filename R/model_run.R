@@ -16,6 +16,7 @@
 #'     4. Interception rate (snow and rain) in areas with no treecover \cr
 #'     5. Interception rate (snow and rain) in areas with partial treecover \cr
 #'     6. Interception rate (snow and rain) in areas with full treecover \cr
+#'     7. Soil storage capacity multiplier \cr
 #' @param data A data frame of inputs to the model containing 31 fields and any number of rows:
 #'     ID: Mandatory to match inputs and outputs \cr
 #'     Lat: Latitude \cr
@@ -30,7 +31,7 @@
 #' @return Monthly runoff in millimeters, either lumped for the whole area, or distributed by coordinates.
 #' 
 #' @export
-DCWBM <- function(data, parameters=c(1.75,1.25,1,0,0.1,0.25), output = 'LUMPED'){
+DCWBM <- function(data, parameters=c(1.75,1.25,1,0,0.1,0.25,1), output = 'LUMPED'){
   rundat <- as.matrix(data)
   runoff <- waterbalance(parameters, rundat)
   

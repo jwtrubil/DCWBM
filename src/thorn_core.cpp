@@ -5,6 +5,12 @@ using namespace Rcpp;
 /* Core code for the computation of the USGS type monthly thornthwaite water balance on a list of locations.  The model is adapted byMoore
 et al 2012 to account for forest cover variations and glaciers.  The input is typically from ClimateWNA.  
 JWT March 2015
+ 
+July 2015 JWT modified to include precip as snow from ClimateWNA instead of the partitioning equation.  
+Additionally, soil moisture storage
+capacity was changed to be supplied by the input data, and have a multiplier supplied as a parameter for calibration
+This should make it more future proof
+ 
 */
 
 //constants
@@ -17,10 +23,10 @@ const double pi = 3.1415926535897;
 double T_rain = 3.0;                    //Temp (C) where precip is 100% rain
 double T_snow = -5.0;                   //Temp (C) where precip is 100% snow
 double melttemp = 0.0;                  //Temp (C) where snowmelt begins
-double STC = 150.0;                     //Soil Moisture Storage Capacity    (mm)
+//double STC = 150.0;                     //Soil Moisture Storage Capacity    (mm)
 double drofrac = 0.05;                  //Direct runoff fraction
 double rfactor = 0.5;                   //fraction of surplus that becomes runoff in a month (Wolock and McCabe(1999)
-double meltrate = 2;                    //base snowmelt rate (mm/deg C) under forest coverage
+double meltrate = 2.0;                  //base snowmelt rate (mm/deg C) under forest coverage
 double glaciermeltfactor = 2.25;        //glacier melt factor multiplier
   
 //initial interception factors, for error handling
@@ -70,6 +76,7 @@ NumericVector total_RO(12);             //Total runoff (surplus plus direct)
 //Functions used in model
 
 //compute mean of an array
+//// [[Rcpp::export]]
 double meanC(NumericVector x) {
   int n = x.size();
   double total = 0;
@@ -82,6 +89,7 @@ double meanC(NumericVector x) {
 
 
 //compute mean day length per month
+//// [[Rcpp::export]]
 NumericVector daylen(double Lat){
   //NumericVector D(365);               //Approximate Day Length
   D = rep(-9999,365);                   //reset day length
@@ -96,12 +104,14 @@ NumericVector daylen(double Lat){
 
 
 //get the days that are in a certain month
+//// [[Rcpp::export]]
 NumericVector ss(NumericVector input, int startday, int endday){
   NumericVector ss(input.begin()+startday, input.begin()+endday+1);
   return ss;
 }
 
 //Compute mean day length per month in units of 12 hours
+//// [[Rcpp::export]]
 NumericVector meandaylen(){
   m_day = rep(-9999,12); //reset m_day
 
@@ -121,7 +131,36 @@ NumericVector meandaylen(){
   //return(m_day);  //don't need to return anything when its a global variable in the model
 }
 
+// //Prefer to have shorter code to get the mean day length per month, doesn't work now though.
+// //must be some sort of type conversion error
+// // [[Rcpp::export]]
+// NumericVector testmdl(NumericVector DOY, NumericVector d){
+//   int start;
+//   int end;
+//   NumericVector m_day(12);
+//   //m_day = rep(-9999,12); //reset m_day
+// 
+//   for (int j = 0; j < 12; j++) {
+//     if (j==0){
+//       //do stuff for first month
+//       start = 0;
+//     }
+//     else {
+//       //do stuff for other months
+//       start = sum(ss(d,0,(j-1)));
+//     }
+//     end = sum(ss(d,0,j))-1;
+//     m_day[j] = meanC(ss(D,start,end))/12;
+//   }
+//   
+//   return m_day; //don't need to return anything when its a global variable in the model
+// }
+
+
+
+
 ////Calculate Hamon PET
+//// [[Rcpp::export]]
 double calcPETh(int month, double meanairtemp){
   //Saturated Water Vapor Density
   double Wt=(4.95*exp(0.062*meanairtemp))/100.0;
@@ -130,16 +169,16 @@ double calcPETh(int month, double meanairtemp){
 }
 
 //partition precipitation
-double part(double airtemp, double T_rain, double T_snow){
-  return (T_rain-airtemp)/(T_rain-T_snow);  
-}
+//double part(double airtemp, double T_rain, double T_snow){
+//  return (T_rain-airtemp)/(T_rain-T_snow);  
+//}
 
 //Update interception and melt rates based on canopy
 double rates(int LC, NumericVector calvals){
   //Melt Factor increases snowmelt by X if no tree coverage (alpine or grassland).  Also an interception factor decreases snow and rain when there is forest coverage
   //Future expansion= different interception rates for different BEC zones.
-        if (LC == 1 || LC == -9999){
-          //Original Clearcut/alpine values  
+        if (LC == 1 || LC == -9999){ //CHANGED //CHANGED 04-06-2014
+          //Clearcut/alpine values  
           //meltfactor = 1.75
           //snowintfactor=0      
           //rainintfactor=0
@@ -147,8 +186,8 @@ double rates(int LC, NumericVector calvals){
           rainintfactor = calvals[3];
           meltfactor=calvals[0];
         } else {
-          if (LC == 2){
-            //Original subalpine values
+          if (LC == 2){ //CHANGED //CHANGED 04-06-2014
+            //subalpine values
             //meltfactor=1.25
             //snowintfactor=0.1
             //rainintfactor=0.1
@@ -156,8 +195,8 @@ double rates(int LC, NumericVector calvals){
             rainintfactor = calvals[4];
             meltfactor = calvals[1];
             }else{
-              if (LC == 3){
-                //Original full canopy values
+              if (LC == 3){ //CHANGED //CHANGED 04-06-2014
+                //full canopy values
                 //meltfactor=1
                 //snowintfactor=0.25
                 //rainintfactor=0.25
@@ -194,6 +233,11 @@ NumericVector waterbalance(NumericVector calvals, NumericMatrix data){
     double L = data(i,1);     //Latitude 
     daylen(L);                //Update Day length
     meandaylen();             //Update Mean Day Length
+    double STC = data(i,43);  //Soil Storage Capacity from the data
+    
+    //Multiply STC by a calibration parameter.  Leave at 1 for now
+    //Eventually either supply STC, or make a linear relationship with elevation
+    STC = STC * calvals[6];
     
     //reset point storages to 0.
     P_rain = rep(0.0,12);
@@ -229,21 +273,27 @@ NumericVector waterbalance(NumericVector calvals, NumericMatrix data){
         //Waterbalance calculations
         
         //Partition precipitation between rain and snow based on temperature
-        double frac = part(data(i,4+x),T_rain,T_snow);
-        P_snow[x] = data(i,16+x)*frac;                  //amount of precip falling as snow
-        P_rain[x] = data(i,16+x)-P_snow[x];             //remaining amount falls as rain
-        if (P_snow[x]<0.0) {                            //P_snow can't be negative
-          P_snow[x] = 0.0;
-          P_rain[x] = data(i,16+x);
-            }                                         
+// This is no longer in use        
+//         double frac = part(data(i,4+x),T_rain,T_snow);
+//         P_snow[x] = data(i,16+x)*frac;                  //amount of precip falling as snow
+//         P_rain[x] = data(i,16+x)-P_snow[x];             //remaining amount falls as rain
+//         if (P_snow[x]<0.0) {                            //P_snow can't be negative
+//           P_snow[x] = 0.0;
+//           P_rain[x] = data(i,16+x);
+//             }                                         
+// 
+//         if (P_rain[x]<0.0) {                            //P_rain can't be negative either
+//           P_rain[x] = 0.0;
+//           P_snow[x] = data(i,16+x);
+//           }
+        
+        //get P_rain and P_snow directly from ClimateWNA
+        P_rain[x] = data(i,16+x)-data(i,28+x);
+        P_snow[x] = data(i,28+x);
 
-        if (P_rain[x]<0.0) {                            //P_rain can't be negative either
-          P_rain[x] = 0.0;
-          P_snow[x] = data(i,16+x);
-          }
 
         //Update melt factors and interception factors based on landcover
-        rates(data(i,28), calvals);
+        rates(data(i,40), calvals);
         
         //Calculate the intercepted precip
         snowint[x] = P_snow[x] * snowintfactor;
@@ -281,7 +331,7 @@ NumericVector waterbalance(NumericVector calvals, NumericMatrix data){
             } 
 
         //glacier melt
-        if ((data(i,30) == 1.0) && (snostor[x] == 0.0)){
+        if ((data(i,42) == 1.0) && (snostor[x] == 0.0)){
           glaciermelt[x] = (data(i,4+x) - melttemp) * meltrate * glaciermeltfactor * d[x];
           } else {
             glaciermelt[x] = 0.0;
@@ -293,7 +343,7 @@ NumericVector waterbalance(NumericVector calvals, NumericMatrix data){
         //Potential Evapotranspiration from Hamon
         //If there is snow on the ground and no tree cover, PET is 0, so all precip and melt goes to the soil
         PETh[x] = calcPETh(x,data(i,4+x));
-        if ((data(i,28) == 1) && (snostor[x] > 0.0)){
+        if ((data(i,40) == 1) && (snostor[x] > 0.0)){
           PETh[x] = 0.0;
           }
         
@@ -315,7 +365,7 @@ NumericVector waterbalance(NumericVector calvals, NumericMatrix data){
             }
           
         //Is it a glacier? 
-        if (data(i,30) == 1){
+        if (data(i,42) == 1){
           
           //If snow is on the ground PET is 0, and all precip and melt goes directly to the surplus
           if(snostor[x] > 0.0){
@@ -372,7 +422,7 @@ NumericVector waterbalance(NumericVector calvals, NumericMatrix data){
         // If the ground surface is water and there is no snowpack (implying that the lake isn't frozen) then the runoff is precip-pet.
         //if pet is greater than precip, the runoff will be negative, acting as a sink)
         //do we want this for wetlands?
-        if ((data(i,29) == 1) && (snostor[x] == 0.0)){
+        if ((data(i,41) == 1) && (snostor[x] == 0.0)){
           total_RO[x] = data(i,16+x) - PETh[x];   
           surp[x] = 0.0;
           RO[x] = 0.0;

@@ -4,7 +4,8 @@
 \alias{DCWBM}
 \title{Distributed Climate Water Balance Model}
 \usage{
-DCWBM(data, parameters = c(1.75, 1.25, 1, 0, 0.1, 0.25), output = "LUMPED")
+DCWBM(data, parameters = c(1.75, 1.25, 1, 0, 0.1, 0.25, 1),
+  output = "LUMPED")
 }
 \arguments{
 \item{data}{A data frame of inputs to the model containing 31 fields and any number of rows:
@@ -24,7 +25,8 @@ Glacier: Binary for Glacier coverage, either (0) no or (1) yes. Overrides LC_cla
 3. Multiplier for snowmelt in areas with full treecover \cr
 4. Interception rate (snow and rain) in areas with no treecover \cr
 5. Interception rate (snow and rain) in areas with partial treecover \cr
-6. Interception rate (snow and rain) in areas with full treecover \cr}
+6. Interception rate (snow and rain) in areas with full treecover \cr
+7. Soil storage capacity multiplier \cr}
 
 \item{output}{Desired output form, either 'LUMPED' or 'DISTRIB'}
 }
