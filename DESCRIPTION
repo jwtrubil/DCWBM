@@ -1,13 +1,13 @@
 Package: DCWBM
 Title: Distributed Climate Water Balance Model
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: person("Joel", "Trubilowicz", email = "jwtrubil@gmail.com", role = c("aut", "cre"))
-Description: A function for running the Distributed 
+Description: A function for running the Distributed
     Climate Water Balance Model
-    from Moore, R.D., Trubilowicz, J.W. and Buttle, J.M. (2012), 
-    Prediction of Streamflow Regime and Annual Runoff for 
-    Ungauged Basins Using a Distributed Monthly Water Balance Model. 
-    JAWRA Journal of the American Water Resources Association, 
+    from Moore, R.D., Trubilowicz, J.W. and Buttle, J.M. (2012),
+    Prediction of Streamflow Regime and Annual Runoff for
+    Ungauged Basins Using a Distributed Monthly Water Balance Model.
+    JAWRA Journal of the American Water Resources Association,
     48. 32–42. DOI: 10.1111/j.1752–1688.2011.00595.x
 Depends: R (>= 3.1.0)
 License: GPL-2

@@ -9,7 +9,7 @@
 #'  @references Moore, R.D., Trubilowicz, J.W. and Buttle, J.M. (2012), Prediction of Streamflow Regime and Annual Runoff for Ungauged Basins Using a Distributed Monthly Water Balance Model. Journal of the American Water Resources Association, 48: 32–42. DOI: 10.1111/j.1752–1688.2011.00595.x \cr
 #' 
 #' @param parameters 
-#' A vector of six model parameters for adjusting snowmelt rates from the base melt rate of 2mm/degree C and interception rates by landcover \cr
+#' A vector of seven model parameters for adjusting snowmelt rates from the base melt rate of 2mm/degree C and interception rates by landcover \cr
 #'     1. Multiplier for snowmelt in areas with no treecover (e.g. alpine) \cr
 #'     2. Multiplier for snowmelt in areas with partial treecover (e.g. subalpine) \cr
 #'     3. Multiplier for snowmelt in areas with full treecover \cr
@@ -28,12 +28,13 @@
 #'     Water: Binary for surface water, either (0) no or (1) yes.  Overrides LC_class \cr
 #'     Glacier: Binary for Glacier coverage, either (0) no or (1) yes. Overrides LC_class \cr
 #' @param output Desired output form, either 'LUMPED' or 'DISTRIB'
+#' @param type Desired output source, either 'runoff' or 'snow'
 #' @return Monthly runoff in millimeters, either lumped for the whole area, or distributed by coordinates.
 #' 
 #' @export
-DCWBM <- function(data, parameters=c(1.75,1.25,1,0,0.1,0.25,1), output = 'LUMPED'){
+DCWBM <- function(data, parameters=c(1.75,1.25,1,0,0.1,0.25,1), output = 'LUMPED', type = 'runoff'){
   rundat <- as.matrix(data)
-  runoff <- waterbalance(parameters, rundat)
+  runoff <- waterbalance(parameters, rundat, type)
   
   if ( output == 'DISTRIB'){
     out <- data.frame(ID = data$ID, Lat = data$Lat, Long = data$Long)

@@ -22,3 +22,5 @@ Check out the vignette:
 
 For more updates on me, DCWBM, and other projects by me and my collaborators, check out:
 [headwateranalytics.com](http://www.headwateranalytics.com)
+
+This is the development version, updated to include using Precip as snow and outputting snow

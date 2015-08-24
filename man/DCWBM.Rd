@@ -5,7 +5,7 @@
 \title{Distributed Climate Water Balance Model}
 \usage{
 DCWBM(data, parameters = c(1.75, 1.25, 1, 0, 0.1, 0.25, 1),
-  output = "LUMPED")
+  output = "LUMPED", type = "runoff")
 }
 \arguments{
 \item{data}{A data frame of inputs to the model containing 31 fields and any number of rows:
@@ -19,7 +19,7 @@ LC_class: Landcover classification, either (1) for no treecover, (2) for partial
 Water: Binary for surface water, either (0) no or (1) yes.  Overrides LC_class \cr
 Glacier: Binary for Glacier coverage, either (0) no or (1) yes. Overrides LC_class \cr}
 
-\item{parameters}{A vector of six model parameters for adjusting snowmelt rates from the base melt rate of 2mm/degree C and interception rates by landcover \cr
+\item{parameters}{A vector of seven model parameters for adjusting snowmelt rates from the base melt rate of 2mm/degree C and interception rates by landcover \cr
 1. Multiplier for snowmelt in areas with no treecover (e.g. alpine) \cr
 2. Multiplier for snowmelt in areas with partial treecover (e.g. subalpine) \cr
 3. Multiplier for snowmelt in areas with full treecover \cr
@@ -29,6 +29,8 @@ Glacier: Binary for Glacier coverage, either (0) no or (1) yes. Overrides LC_cla
 7. Soil storage capacity multiplier \cr}
 
 \item{output}{Desired output form, either 'LUMPED' or 'DISTRIB'}
+
+\item{type}{Desired output source, either 'runoff' or 'snow'}
 }
 \value{
 Monthly runoff in millimeters, either lumped for the whole area, or distributed by coordinates.

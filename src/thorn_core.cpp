@@ -211,7 +211,7 @@ double rates(int LC, NumericVector calvals){
 
 //Water balance calculation
 // [[Rcpp::export]]
-NumericVector waterbalance(NumericVector calvals, NumericMatrix data){
+NumericVector waterbalance(NumericVector calvals, NumericMatrix data, std::string out){
   int nrow = data.nrow();
   
   //Initialization of Matrices for output
@@ -447,5 +447,11 @@ NumericVector waterbalance(NumericVector calvals, NumericMatrix data){
       k++;
     }
  }
-  return flow;
+  //options to return other data
+  if (out == "snow"){
+  return snowpack;
+  } 
+    else {
+      return flow;
+    }
 }
