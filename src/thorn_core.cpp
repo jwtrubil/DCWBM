@@ -169,9 +169,9 @@ double calcPETh(int month, double meanairtemp){
 }
 
 //partition precipitation
-//double part(double airtemp, double T_rain, double T_snow){
-//  return (T_rain-airtemp)/(T_rain-T_snow);  
-//}
+double part(double airtemp, double T_rain, double T_snow){
+  return (T_rain-airtemp)/(T_rain-T_snow);  
+}
 
 //Update interception and melt rates based on canopy
 double rates(int LC, NumericVector calvals){
@@ -211,7 +211,7 @@ double rates(int LC, NumericVector calvals){
 
 //Water balance calculation
 // [[Rcpp::export]]
-NumericVector waterbalance(NumericVector calvals, NumericMatrix data, std::string out){
+NumericVector waterbalance(NumericVector calvals, NumericMatrix data, std::string out, std::string rsnowpart){
   int nrow = data.nrow();
   
   //Initialization of Matrices for output
@@ -273,24 +273,28 @@ NumericVector waterbalance(NumericVector calvals, NumericMatrix data, std::strin
         //Waterbalance calculations
         
         //Partition precipitation between rain and snow based on temperature
-// This is no longer in use        
-//         double frac = part(data(i,4+x),T_rain,T_snow);
-//         P_snow[x] = data(i,16+x)*frac;                  //amount of precip falling as snow
-//         P_rain[x] = data(i,16+x)-P_snow[x];             //remaining amount falls as rain
-//         if (P_snow[x]<0.0) {                            //P_snow can't be negative
-//           P_snow[x] = 0.0;
-//           P_rain[x] = data(i,16+x);
-//             }                                         
-// 
-//         if (P_rain[x]<0.0) {                            //P_rain can't be negative either
-//           P_rain[x] = 0.0;
-//           P_snow[x] = data(i,16+x);
-//           }
-        
+// This is no longer in use  
+    if (rsnowpart == "fromdata"){
         //get P_rain and P_snow directly from ClimateWNA
         P_rain[x] = data(i,16+x)-data(i,28+x);
         P_snow[x] = data(i,28+x);
+    } else {
+        T_rain = calvals[7];
+        T_snow = calvals[8];
+        
+        double frac = part(data(i,4+x),T_rain,T_snow);
+        P_snow[x] = data(i,16+x)*frac;                  //amount of precip falling as snow
+        P_rain[x] = data(i,16+x)-P_snow[x];             //remaining amount falls as rain
+        if (P_snow[x]<0.0) {                            //P_snow can't be negative
+          P_snow[x] = 0.0;
+          P_rain[x] = data(i,16+x);
+            }                                         
 
+        if (P_rain[x]<0.0) {                            //P_rain can't be negative either
+          P_rain[x] = 0.0;
+          P_snow[x] = data(i,16+x);
+          }
+    }   
 
         //Update melt factors and interception factors based on landcover
         rates(data(i,40), calvals);

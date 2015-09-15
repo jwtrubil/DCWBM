@@ -17,24 +17,28 @@
 #'     5. Interception rate (snow and rain) in areas with partial treecover \cr
 #'     6. Interception rate (snow and rain) in areas with full treecover \cr
 #'     7. Soil storage capacity multiplier \cr
+#'     8. Temp at which precip is all rain \cr
+#'     9. Temp at which precipitation is all snow \cr
 #' @param data A data frame of inputs to the model containing 31 fields and any number of rows:
 #'     ID: Mandatory to match inputs and outputs \cr
 #'     Lat: Latitude \cr
 #'     Lon: Longitude \cr
 #'     Elev: Elevation \cr
 #'     12 columns of monthly average temperature (degrees C) \cr
-#'     12 columns of monthly precipitation (mm) \cr
+#'     12 columns of monthly total precipitation (mm) \cr
+#'     12 columns of precip as snow (mm) Note that this can be left as NA if
 #'     LC_class: Landcover classification, either (1) for no treecover, (2) for partial treecover, or (3) for full treecover \cr
 #'     Water: Binary for surface water, either (0) no or (1) yes.  Overrides LC_class \cr
 #'     Glacier: Binary for Glacier coverage, either (0) no or (1) yes. Overrides LC_class \cr
-#' @param output Desired output form, either 'LUMPED' or 'DISTRIB'
-#' @param type Desired output source, either 'runoff' or 'snow'
+#' @param output Desired output form, either 'LUMPED' or 'DISTRIB' \cr
+#' @param type Desired output source, either 'runoff' or 'snow' \cr
+#' @param snowpart How to calculate precip as snow, either 'fromtemp' or 'fromdata' \cr
 #' @return Monthly runoff in millimeters, either lumped for the whole area, or distributed by coordinates.
 #' 
 #' @export
-DCWBM <- function(data, parameters=c(1.75,1.25,1,0,0.1,0.25,1), output = 'LUMPED', type = 'runoff'){
+DCWBM <- function(data, parameters=c(1.75,1.25,1,0,0.1,0.25,1,3,-5), output = 'LUMPED', type = 'runoff', snowpart = 'fromdata'){
   rundat <- as.matrix(data)
-  runoff <- waterbalance(parameters, rundat, type)
+  runoff <- waterbalance(parameters, rundat, type, snowpart)
   
   if ( output == 'DISTRIB'){
     out <- data.frame(ID = data$ID, Lat = data$Lat, Long = data$Long)

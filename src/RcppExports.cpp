@@ -6,15 +6,16 @@
 using namespace Rcpp;
 
 // waterbalance
-NumericVector waterbalance(NumericVector calvals, NumericMatrix data, std::string out);
-RcppExport SEXP DCWBM_waterbalance(SEXP calvalsSEXP, SEXP dataSEXP, SEXP outSEXP) {
+NumericVector waterbalance(NumericVector calvals, NumericMatrix data, std::string out, std::string rsnowpart);
+RcppExport SEXP DCWBM_waterbalance(SEXP calvalsSEXP, SEXP dataSEXP, SEXP outSEXP, SEXP rsnowpartSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< NumericVector >::type calvals(calvalsSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
     Rcpp::traits::input_parameter< std::string >::type out(outSEXP);
-    __result = Rcpp::wrap(waterbalance(calvals, data, out));
+    Rcpp::traits::input_parameter< std::string >::type rsnowpart(rsnowpartSEXP);
+    __result = Rcpp::wrap(waterbalance(calvals, data, out, rsnowpart));
     return __result;
 END_RCPP
 }
