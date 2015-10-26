@@ -273,7 +273,6 @@ NumericVector waterbalance(NumericVector calvals, NumericMatrix data, std::strin
         //Waterbalance calculations
         
         //Partition precipitation between rain and snow based on temperature
-// This is no longer in use  
     if (rsnowpart == "fromdata"){
         //get P_rain and P_snow directly from ClimateWNA
         P_rain[x] = data(i,16+x)-data(i,28+x);
@@ -341,6 +340,11 @@ NumericVector waterbalance(NumericVector calvals, NumericMatrix data, std::strin
             glaciermelt[x] = 0.0;
             }
 
+        //Don't want to store cold content in glacier either
+        if (glaciermelt[x] <= 0.0){
+          glaciermelt[x] = 0.0;
+          }   
+          
         //total amount water  that proceeds to the soil
         P_total[x] = P_remain[x] + linearmelt[x] + glaciermelt[x];
           
