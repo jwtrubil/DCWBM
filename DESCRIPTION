@@ -1,6 +1,6 @@
 Package: DCWBM
 Title: Distributed Climate Water Balance Model
-Version: 0.1.0
+Version: 0.1.0.1
 Authors@R: person("Joel", "Trubilowicz", email = "jwtrubil@gmail.com", role = c("aut", "cre"))
 Description: A function for running the Distributed 
     Climate Water Balance Model
