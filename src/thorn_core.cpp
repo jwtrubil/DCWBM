@@ -287,6 +287,11 @@ NumericVector waterbalance(NumericVector calvals, NumericMatrix data){
             glaciermelt[x] = 0.0;
             }
 
+         //Don't want to store cold content in glacier either
+        if (glaciermelt[x] <= 0.0){
+          glaciermelt[x] = 0.0;
+          } 
+          
         //total amount water  that proceeds to the soil
         P_total[x] = P_remain[x] + linearmelt[x] + glaciermelt[x];
           
