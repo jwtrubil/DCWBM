@@ -7,7 +7,7 @@ This is an R package containing the model code for the Distributed Climate Water
 
 The model described in the paper is an extension to the monthly water balance model from the USGS:
 
-McCabe, G.J. and Markstrom, S.L. (2007). A Monthly Water-Balance Model Driven by a Graphical User Interface. Open-File report 2007-1088. U.S. Geological Survey, 6 pp., Reston, Virginia
+**McCabe, G.J. and Markstrom, S.L. (2007)**. A Monthly Water-Balance Model Driven by a Graphical User Interface. Open-File report 2007-1088. U.S. Geological Survey, 6 pp., Reston, Virginia
 
 To install (for research version):
 
