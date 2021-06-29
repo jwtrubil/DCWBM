@@ -13,7 +13,7 @@ Depends: R (>= 3.1.0)
 License: GPL-2
 LazyData: true
 Imports: Rcpp
-Suggests: testthat, knitr
+Suggests: testthat, knitr, rmarkdown
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 Encoding: UTF-8
