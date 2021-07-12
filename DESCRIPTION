@@ -1,6 +1,6 @@
 Package: DCWBM
 Title: Distributed Climate Water Balance Model
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: person("Joel", "Trubilowicz", email = "jwtrubil@gmail.com", role = c("aut", "cre"))
 Description: A function for running the Distributed
     Climate Water Balance Model
@@ -12,8 +12,8 @@ Description: A function for running the Distributed
 Depends: R (>= 3.1.0)
 License: GPL-2
 LazyData: true
-Imports: Rcpp, rmarkdown
-Suggests: testthat, knitr
+Imports: Rcpp
+Suggests: testthat, knitr, rmarkdown
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 Encoding: UTF-8
