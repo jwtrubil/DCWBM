@@ -90,7 +90,7 @@ double meanC(NumericVector x) {
 
 //compute mean day length per month
 //// [[Rcpp::export]]
-NumericVector daylen(double Lat){
+void daylen(double Lat){
   //NumericVector D(365);               //Approximate Day Length
   D = rep(-9999,365);                   //reset day length
   //loop through all the days of a year
@@ -112,7 +112,7 @@ NumericVector ss(NumericVector input, int startday, int endday){
 
 //Compute mean day length per month in units of 12 hours
 //// [[Rcpp::export]]
-NumericVector meandaylen(){
+void meandaylen(){
   m_day = rep(-9999,12); //reset m_day
 
   m_day[0]=meanC(ss(D,0,30))/12; 
@@ -174,7 +174,7 @@ double part(double airtemp, double T_rain, double T_snow){
 }
 
 //Update interception and melt rates based on canopy
-double rates(int LC, NumericVector calvals){
+void rates(int LC, NumericVector calvals){
   //Melt Factor increases snowmelt by X if no tree coverage (alpine or grassland).  Also an interception factor decreases snow and rain when there is forest coverage
   //Future expansion= different interception rates for different BEC zones.
         if (LC == 1 || LC == -9999){ //CHANGED //CHANGED 04-06-2014
